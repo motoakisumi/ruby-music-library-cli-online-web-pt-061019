@@ -1,4 +1,5 @@
 class Artist
+  extend Concerns::Findable
 
   attr_accessor :name
   @@all = []
@@ -17,7 +18,7 @@ class Artist
   end
 
   def self.destroy_all
-    @@all = []
+    @@all.clear
   end
 
   def self.create(name)
@@ -27,12 +28,25 @@ class Artist
   end
 
   def songs
-    Song.all
+    @songs
   end
 
   def add_song(song)
     song.artist = self unless song.artist != nil
-    song.save unless Song.all.include? song
+    @songs << song unless @songs.include? song
   end
+
+  def genres
+    test_array = []
+    @songs.each do |song|
+      if test_array.include?(song.genre)
+        nil
+      else
+        test_array << song.genre
+      end
+    end
+    test_array
+  end
+
 
 end
